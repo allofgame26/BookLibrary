@@ -21,7 +21,7 @@ public class MyDatabase extends SQLiteOpenHelper {
     private static final String Column_Author = "book_author";
     private static final String Column_page = "book_pages";
 
-    public MyDatabase(@Nullable Context context) {
+    MyDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -66,5 +66,20 @@ public class MyDatabase extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
         }
         return cursor;
+    }
+
+    void updateData(String row_id,String title, String author, String pages){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Column_title, title);
+        cv.put(Column_Author, author);
+        cv.put(Column_page, pages);
+
+        long result = db.update(Table_Name, cv, "_id=?", new String[]{row_id});
+        if (result == -1){
+            Toast.makeText(context, "Failed To Updated", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Succesfully Updated!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
